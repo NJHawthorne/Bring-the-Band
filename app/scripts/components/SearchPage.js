@@ -1,6 +1,6 @@
 import React from 'react';
 import NavBar from './subcomponents/NavBar.js';
-import SearchForm from './subcomponents/SearchForm.js';
+import SearchContent from './subcomponents/SearchContent.js';
 import Footer from './subcomponents/Footer.js';
 
 const SearchPage= React.createClass({
@@ -8,7 +8,7 @@ const SearchPage= React.createClass({
 		return (
 			<main>
 				<NavBar />
-				<SearchForm />
+				<SearchContent />
 				<Footer />
 			</main>
 		)
