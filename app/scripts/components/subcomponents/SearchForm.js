@@ -1,9 +1,11 @@
 import React from 'react';
 
+// "https://api.spotify.com/v1/search?q={this.ref.search}*&type=artist"
+
 const SearchForm = React.createClass({
 	handleSearch: function(e) {
 		e.preventDefault();
-		// "https://api.spotify.com/v1/search?q={this.ref.search}*&type=artist"
+		console.log({this.ref.search.value});
 	}
 	render: function() {
 		return (
