@@ -6,7 +6,7 @@ const ResultsModel = Backbone.Model.extend({
 		thumbnail: '',
 		votes: 0
 	},
-	rootUrl: 'http://tiny-za-server.herokuapp.com/collections/unicorns',
+	rootUrl: 'http://tiny-za-server.herokuapp.com/collections/nate-hawthorne',
 	idAttribute: '_id'
 });
 
