@@ -12,28 +12,50 @@ const SearchContent = React.createClass({
 	handleSearch: function(e) {
 		e.preventDefault();
 		let search = this.refs.search.value;
-		let newResults = [];
-		$.get("https://api.spotify.com/v1/search?q="+search+"*&type=artist", function(bandData) {
-			newResults = bandData.artists.items.map(function(artists, i, arr) {
-				console.log(artists.name);
-				if (artists.images == false){
-					console.log("No image URL detected");
-				} else {
-					console.log(artists.images[0].url);
-				}
-				return {
-					name: artists.name,
-					url: artists.images
-				};
+		this.searchRequest = $.get("https://api.spotify.com/v1/search?q="+search+"*&type=artist", function(bandData) {
+			let bandList = bandData.artists;
+			// newResults = bandList.items.map(function(artists, i, arr) {
+			// 	return {
+			// 		name: artists.name,
+			// 		url: artists.images
+			// 	};
+			// });
+			// console.log(newResults);
+			// console.log(this.state);
+			this.setState({
+				results: bandList.items
 			});
-		});
-		this.setState({results: newResults})
-		console.log(this.state);
-		console.log(this.state.results);
-		// console.log(this.refs.search.value);
+		// I'll be honest, this is the only thing I don't fully 
+		// understand. I know that 'this' inside of the ajax requests
+		// sets 'this' to the AJAX request itself, so I know that 
+		// this gets around that, but I still don't fully know why
+		// bind gets around this.
+		}.bind(this));
+		// this.setState(function(previousState) {
+		// 	console.log(previousState);
+		// 	return {results: previousState.results.push(newResults)};
+		// });
+		// console.log(this.state);
+		// console.log(this.state.results);
 	},
 	render: function() {
-		const spotifyResults = this.state.bandData;
+		const bandListings = this.state;
+		const totalListings = [];
+		totalListings.push(bandListings.results);
+		const eachListing = (totalListings[0]).map((val, i, arr) => {
+			if(val.images == false) {
+				val.images.push({url: "http://vignette3.wikia.nocookie.net/max-steel-reboot/images/7/72/No_Image_Available.gif/revision/latest?cb=20130902173013"});
+			}
+			return (
+				<div className="bandListings"
+					key={val.id}>
+					<img src={val.images[0].url}/>
+					<p> {val.name} </p>
+					<input
+						type="submit">Vote!</input>
+				</div>
+			)
+		});
 		return (
 			<section>
 				<form
@@ -45,7 +67,8 @@ const SearchContent = React.createClass({
 					<input 
 						type="submit" />
 				</form>
-				<header>Showing some results</header>		
+				<header>Showing {this.state.results.length} results</header>	
+				{eachListing}	
 			</section>
 		)
 	}
