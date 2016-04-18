@@ -1,19 +1,23 @@
 import React from 'react';
 import results from './../../collections/Results.js';
+import VoteEntry from './VoteEntry.js';
 
 const VoteContents = React.createClass({
 	getInitialState: function() {
 		return {
 			results: []
+		}
 	},
 	componentDidMount: function() {
-		results.on('change', ()=> {
+		results.on('add', ()=> {
 			this.setState({results: results})
 		});
 		results.fetch();
 	},
 	render: function() {
-		const voteResults = this.state.results.map((val, i, arr) => {
+		let votes = this.state.results;
+		console.log(votes);
+		const voteResults = votes.map((val, i, arr) => {
 			return (
 				<VoteEntry 
 					key={val.get('id')}
@@ -23,7 +27,7 @@ const VoteContents = React.createClass({
 			)
 		});
 		return (
-			{voteResults}
+			<div>Hi!</div>
 		)
 	}
 });

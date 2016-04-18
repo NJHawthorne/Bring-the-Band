@@ -1,7 +1,10 @@
 import React from 'react';
 
 const VoteEntry = React.createClass({
-	
+	addVote: function() {
+		console.log(this.props.vote);
+		return this.props.vote+1;
+	},
 	render: function() {
 		return (
 			<div

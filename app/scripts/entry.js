@@ -7,12 +7,13 @@ import {render} from 'react-dom';
 import {Router, Route, hashHistory} from 'react-router';
 import HomePage from './components/HomePage.js';
 import SearchPage from './components/SearchPage.js';
-// import VotesPage from './components/VotesPage.js';
+import VotesPage from './components/VotesPage.js';
 
 const router = (
 	<Router history={hashHistory}>
 		<Route path="/" component={HomePage}/>
 		<Route path="/search" component={SearchPage}/>
+		<Route path="/results" component={VotesPage}/>
 	</Router>
 );
 
