@@ -26,6 +26,7 @@ const VoteContents = React.createClass({
 					votes={val.get('votes')}/>
 			)
 		});
+		console.log(voteResults);
 		return (
 			<div>Hi!</div>
 		)

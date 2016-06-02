@@ -3,12 +3,11 @@ import results from './../../collections/Results.js';
 
 const BandListing = React.createClass({
 	handleVote: function(e) {
-		let newVote = {
+		const newVote = {
 			artist: this.props.artist,
-			thumbnail: this.props.thumbnail,
-			votes: 1
+			thumbnail: this.props.thumbnail
 		};
-		results.create(newVote);
+		this.props.handleVote(newVote);
 	},
 	render: function() {
 		return (

@@ -1,48 +1,26 @@
 import React from 'react';
 import $ from 'jquery';
 import BandListing from './BandListing.js';
+import Results from './../../collections/Results.js';
 
 // "https://api.spotify.com/v1/search?q={this.refs.search.value}*&type=artist"
 
 const SearchContent = React.createClass({
 	getInitialState: function() {
 		return {
-			results: []
+			searchResults: [],
+			results: Results
 		}	
 	},
-	handleSearch: function(e) {
-		e.preventDefault();
-		let search = this.refs.search.value;
-		this.searchRequest = $.get("https://api.spotify.com/v1/search?q="+search+"*&type=artist", function(bandData) {
-			let bandList = bandData.artists;
-			// newResults = bandList.items.map(function(artists, i, arr) {
-			// 	return {
-			// 		name: artists.name,
-			// 		url: artists.images
-			// 	};
-			// });
-			// console.log(newResults);
-			// console.log(this.state);
-			this.setState({
-				results: bandList.items
-			});
-		// I'll be honest, this is the only thing I don't fully 
-		// understand. I know that 'this' inside of the ajax requests
-		// sets 'this' to the AJAX request itself, so I know that 
-		// this gets around that, but I still don't fully know why
-		// bind gets around this.
-		}.bind(this));
-		// this.setState(function(previousState) {
-		// 	console.log(previousState);
-		// 	return {results: previousState.results.push(newResults)};
-		// });
-		// console.log(this.state);
-		// console.log(this.state.results);
+	componentDidMount: function() {
+		this.state.results.on('update', () => {
+			this.setState({results: this.state.results});
+		});
+		this.state.results.fetch();
 	},
 	render: function() {
-		const bandListings = this.state;
 		const totalListings = [];
-		totalListings.push(bandListings.results);
+		totalListings.push(this.state.searchResults);
 		const eachListing = (totalListings[0]).map((val, i, arr) => {
 			if(val.images == false) {
 				val.images.push({url: "http://vignette3.wikia.nocookie.net/max-steel-reboot/images/7/72/No_Image_Available.gif/revision/latest?cb=20130902173013"});
@@ -51,7 +29,8 @@ const SearchContent = React.createClass({
 				<BandListing 
 					key={val.id}
 					artist={val.name}
-					thumbnail={val.images[0].url} />
+					thumbnail={val.images[0].url}
+					handleVote={this.handleVote} />
 			)
 		});
 		return (
@@ -65,10 +44,33 @@ const SearchContent = React.createClass({
 					<input 
 						type="submit" />
 				</form>
-				<header>Showing {this.state.results.length} results</header>	
+				<header>Showing {this.state.searchResults.length} results</header>	
 				{eachListing}	
 			</section>
 		)
+	},
+	handleSearch: function(e) {
+		e.preventDefault();
+		let search = this.refs.search.value;
+		this.searchRequest = $.get("https://api.spotify.com/v1/search?q="+search+"*&type=artist", function(bandData) {
+			let bandList = bandData.artists;
+			this.setState({
+				searchResults: bandList.items
+			});
+		}.bind(this));
+	},
+	handleVote: function(newVote) {
+		let upvotedArtists = this.state.results.models;
+		for (var i = 0; i < upvotedArtists.length; i++) {
+			if(upvotedArtists[i].get('artist') === newVote.artist) {
+				console.log('There was a match');
+				let updatedBand = this.state.results.get(upvotedArtists[i].get('id'));
+				console.log(updatedBand);
+				// updatedBand.save({
+				// 	votes: (upvotedArtists[i].get('votes') + 1)
+				// })
+			}
+		}
 	}
 });
 
