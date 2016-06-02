@@ -3,22 +3,25 @@ import './../styles/main.scss';
 
 // import a module from another file.
 import React from 'react';
-import {render} from 'react-dom';
-import {Router, Route, hashHistory} from 'react-router';
+import ReactDOM from 'react-dom';
+import {Router, Route, browserHistory, IndexRoute} from 'react-router';
+import App from './components/app.js'
 import HomePage from './components/HomePage.js';
 import SearchPage from './components/SearchPage.js';
 import VotesPage from './components/VotesPage.js';
 
 const router = (
-	<Router history={hashHistory}>
-		<Route path="/" component={HomePage}/>
-		<Route path="/search" component={SearchPage}/>
-		<Route path="/results" component={VotesPage}/>
+	<Router history={browserHistory}>
+		<Route path="/" component={App}>
+			<IndexRoute component={HomePage}/>
+			<Route path="/search" component={SearchPage}/>
+			<Route path="/results" component={VotesPage}/>
+		</Route>
 	</Router>
 );
 
 
-render(
+ReactDOM.render(
   router,
   document.getElementById('app')
 );

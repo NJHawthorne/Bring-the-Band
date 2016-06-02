@@ -2,35 +2,36 @@ import React from 'react';
 import results from './../../collections/Results.js';
 import VoteEntry from './VoteEntry.js';
 
-const VoteContents = React.createClass({
+export default React.createClass({
 	getInitialState: function() {
 		return {
-			results: []
+			results: results
 		}
 	},
 	componentDidMount: function() {
-		results.on('add', ()=> {
+		this.state.results.on('update change', () => {
 			this.setState({results: results})
 		});
 		results.fetch();
 	},
+	componentWillUnmount: function() {
+		this.state.results.off('update change');
+	},
 	render: function() {
 		let votes = this.state.results;
-		console.log(votes);
 		const voteResults = votes.map((val, i, arr) => {
 			return (
 				<VoteEntry 
-					key={val.get('id')}
+					key={val.get('_id')}
 					artist={val.get('artist')}
 					thumbnail={val.get('thumbnail')}
-					votes={val.get('votes')}/>
-			)
+					votes={val.get('votes')} />
+			);
 		});
-		console.log(voteResults);
 		return (
-			<div>Hi!</div>
-		)
+			<div>
+				{voteResults}
+			</div>
+		);
 	}
 });
-
-export default VoteContents;

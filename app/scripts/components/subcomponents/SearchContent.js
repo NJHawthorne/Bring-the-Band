@@ -14,10 +14,13 @@ const SearchContent = React.createClass({
 	},
 	componentDidMount: function() {
 		//fetching the models that already have votes
-		this.state.results.on('update', () => {
+		this.state.results.on('update change', () => {
 			this.setState({results: this.state.results});
 		});
 		this.state.results.fetch();
+	},
+	componentWillUnmount: function() {
+		this.state.results.off('update change');
 	},
 	render: function() {
 		//storing the search results from Spotify
